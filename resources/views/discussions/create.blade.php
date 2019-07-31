@@ -7,7 +7,7 @@
 
         <div class="card-body">
 
-            <form action="{{route('discussion.store')}}" method="post">
+            <form action="{{route('discussions.store')}}" method="post">
 
                 @csrf
 

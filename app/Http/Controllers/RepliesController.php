@@ -3,21 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Discussion;
-use App\Http\Requests\CreateDiscussionRequest;
-use App\Reply;
+use App\Http\Requests\CreateReplyRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 
-class DiscussionsController extends Controller
+class RepliesController extends Controller
 {
-
-
-    public function __construct()
-    {
-        $this->middleware('auth')->only(['create','store']);
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -26,11 +16,6 @@ class DiscussionsController extends Controller
     public function index()
     {
         //
-
-        return view('discussions.index',[
-
-            'discussions'=>Discussion::paginate(5)
-        ]);
     }
 
     /**
@@ -41,8 +26,6 @@ class DiscussionsController extends Controller
     public function create()
     {
         //
-
-        return view('discussions.create');
     }
 
     /**
@@ -51,21 +34,17 @@ class DiscussionsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateDiscussionRequest $request)
+    public function store(CreateReplyRequest $request,Discussion $discussion)
     {
         //
-        auth()->user()->discussions()->create([
-           'title'=>$request->title,
-           'slug'=> Str::slug($request->title,'-'),
-           'content'=>$request->content,
-           'channel_id'=>$request->channel
-
-
+        auth()->user()->replies()->create([
+            'discussion_id'=>$discussion->id,
+            'content'=>$request->content
         ]);
 
-        session()->flash('success','Discussion Create Successfully');
+        session()->flash('success','Reply Successfully Added');
 
-        return redirect()->route('discussions.index');
+        return redirect()->back();
     }
 
     /**
@@ -74,12 +53,9 @@ class DiscussionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Discussion $discussion)
+    public function show($id)
     {
         //
-        return view('discussions.show',[
-            'discussion'=>$discussion
-        ]);
     }
 
     /**
@@ -114,14 +90,5 @@ class DiscussionsController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function reply(Discussion $discussion,Reply $reply){
-
-        $discussion->markAsBestReply($reply);
-
-        session()->flash('success','Best reply marked successfully');
-
-        return redirect()->back();
     }
 }

@@ -1,9 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="d-flex justify-content-end">
-        <a href="{{route('discussion.create')}}" class="btn btn-success mb-3">Add Discussion</a>
-    </div>
+
     <div class="card">
         <div class="card-header">Dashboard</div>
 
