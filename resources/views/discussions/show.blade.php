@@ -73,7 +73,7 @@
                 </div>
 
                 <div>
-
+                @auth
                     @if(auth()->user()->id==$discussion->user_id)
                         <form method="post" action="{{route('discussions.reply',[
                         'discussion'=>$discussion->slug,
@@ -86,6 +86,7 @@
                         </form>
 
                     @endif
+                @endauth
                         <span class="my-2 mx-2">{{$reply->created_at->diffForHumans()}}</span>
                 </div>
 

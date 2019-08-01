@@ -35,6 +35,21 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('discussions.index')}}">Discussions</a>
+                        </li>
+                        @auth
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('users.notifications')}}">
+                            <span class="badge badge-info">
+                                         {{auth()->user()->unreadNotifications->count()}}
+                                unread notifications
+                            </span>
+                            </a>
+
+
+                        </li>
+                        @endauth
 
                     </ul>
 
@@ -77,6 +92,17 @@
         @if(!in_array(request()->path(),['password/email','login','register','password/reset']))
 
             <main class="container py-4">
+                @if(session()->has('success'))
+                    <div id="success_div" class="alert alert-success">
+                        {{session()->get('success')}}
+                    </div>
+                @endif
+
+                @if(session()->has('error'))
+                    <div id="error_div" class="alert alert-danger">
+                        {{session()->get('error')}}
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-md-4">
 
@@ -101,7 +127,10 @@
 
                                         @foreach($channels as $channel)
                                             <li class="list-group-item">
-                                                {{$channel->name}}
+                                                <a href="{{route('discussions.index')}}?channel={{$channel->slug}}">
+                                                    {{$channel->name}}
+                                                </a>
+
                                             </li>
                                         @endforeach
 

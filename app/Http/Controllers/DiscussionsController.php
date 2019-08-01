@@ -15,7 +15,7 @@ class DiscussionsController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth')->only(['create','store']);
+        $this->middleware(['auth','verified'])->only(['create','store']);
     }
 
     /**
@@ -29,7 +29,7 @@ class DiscussionsController extends Controller
 
         return view('discussions.index',[
 
-            'discussions'=>Discussion::paginate(5)
+            'discussions'=>Discussion::filterByChannels()->paginate(5)
         ]);
     }
 
@@ -63,7 +63,7 @@ class DiscussionsController extends Controller
 
         ]);
 
-        session()->flash('success','Discussion Create Successfully');
+        session()->flash('success','Discussion Created Successfully');
 
         return redirect()->route('discussions.index');
     }
